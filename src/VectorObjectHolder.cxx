@@ -21,8 +21,14 @@ VectorObjectHolder<T>::VectorObjectHolder(std::vector<T>* ptr) :
 
 template <class T>
 int VectorObjectHolder<T>::clear() {
+
+         std::size_t siz = (m_ptr) ? m_ptr->size() : 0;
+
          if (m_ptr) m_ptr->clear();
          else return 0;
+    
+         //reserve memory based on previous size
+         if (siz > 0) m_ptr->reserve(siz);
 
          return 1;
 }
