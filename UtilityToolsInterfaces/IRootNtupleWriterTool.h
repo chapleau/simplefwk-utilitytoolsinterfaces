@@ -32,6 +32,8 @@ class IRootNtupleWriterTool
   virtual int pushBack(std::string,const boost::any&) = 0;
   
   virtual IObjectHolder* getObjectHolder(std::string) = 0;
+  
+  virtual void stop() = 0;
 
  protected:
 
