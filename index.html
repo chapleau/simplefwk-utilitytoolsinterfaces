@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Simple framework by chapleau</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Simple framework</h1>
+        <p></p>
+
+        <p class="view"><a href="https://github.com/chapleau/simplefwk-utilitytoolsinterfaces">View the Project on GitHub <small>chapleau/simplefwk-utilitytoolsinterfaces</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/chapleau/simplefwk-utilitytoolsinterfaces/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/chapleau/simplefwk-utilitytoolsinterfaces/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/chapleau/simplefwk-utilitytoolsinterfaces">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="services---utility-tools---utility-tools-interfaces" class="anchor" href="#services---utility-tools---utility-tools-interfaces"><span class="octicon octicon-link"></span></a><a href="http://chapleau.github.io/simplefwk-services/">Services</a> - <a href="http://chapleau.github.io/simplefwk-utilitytools/">Utility Tools</a> - <strong>Utility Tools Interfaces</strong>
+</h1>
+
+<p><code>simplefwk-utilitytoolsinterfaces</code> contains the <code>IObjectHolder</code> and <code>IRootNtupleWriterTool</code> interface header files. It also contains concrete <code>IObjectHolder</code> classes.</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>installation</h2>
+
+<p>A makefile is provided for unix-like operating systems (tested on Mac OS X 10.7.5). Requirements: </p>
+
+<ul>
+<li>C++11 compliant c++ compiler (e.g. g++ 4.8)</li>
+<li><a href="http://www.boost.org/">boost</a></li>
+</ul><p>(All the above can be obtained through <a href="http://www.macports.org/">macports</a> for Max OS X systems.)</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>The easiest way to register TTree branches with the concrete classes is by means of a macro:</p>
+
+<div class="highlight highlight-c++"><pre><span class="c1">//helper macros</span>
+<span class="cp">#define REGBRANCH_S(name, type, initVal) m_ntuple_helper-&gt;registerBranch(#name, new SingleObjectHolder&lt; type &gt;(initVal));</span>
+<span class="cp">#define REGBRANCH_V(name, type)          m_ntuple_helper-&gt;registerBranch(#name, new VectorObjectHolder&lt; type &gt;());</span>
+</pre></div>
+
+<p>Here, <strong>SingleObjectHolder</strong> is used to register a branch containing a single data object per event (such as an integer, a float, or a double, etc.). A default initial value can be specified. </p>
+
+<p><strong>VectorObjectHolder</strong> is used for vector of data objects (such as a vector of floats).</p>
+
+<p>With the help of those macros, one can readily register branches to the ROOT ntuple write tool:</p>
+
+<div class="highlight highlight-c++"><pre><span class="n">REGBRANCH_S</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">REGBRANCH_V</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="kt">double</span><span class="p">)</span>
+</pre></div>
+
+<p>In a single event, the <code>IRootNtupleWriterTool::pushBack</code> method is to be called once for branches associated with a single data object (<strong>SingleObjectHolder</strong>) and as many as needed for vector of data objects (<strong>VectorObjectHolder</strong>). I.e., in a single event :</p>
+
+<div class="highlight highlight-c++"><pre><span class="kt">int</span> <span class="n">my_target</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="n">m_ntuple_helper</span><span class="o">-&gt;</span><span class="n">pushBack</span><span class="p">(</span><span class="s">"target"</span><span class="p">,</span> <span class="n">boost</span><span class="o">::</span><span class="n">any</span><span class="p">(</span><span class="o">&amp;</span><span class="n">my_target</span><span class="p">));</span>
+
+<span class="k">for</span> <span class="p">(</span> <span class="k">auto</span> <span class="k">const</span> <span class="o">&amp;</span> <span class="n">it</span> <span class="o">:</span> <span class="n">features</span> <span class="p">)</span> <span class="p">{</span>
+
+  <span class="n">m_ntuple_helper</span><span class="o">-&gt;</span><span class="n">pushBack</span><span class="p">(</span><span class="s">"features"</span><span class="p">,</span> <span class="n">boost</span><span class="o">::</span><span class="n">any</span><span class="p">(</span><span class="o">&amp;</span><span class="n">it</span><span class="p">));</span>
+
+<span class="p">}</span>
+</pre></div>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/chapleau">chapleau</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
