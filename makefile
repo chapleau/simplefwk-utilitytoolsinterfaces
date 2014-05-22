@@ -1,4 +1,4 @@
-CC=g++-mp-4.8
+CC=g++
 CFLAGS=-std=c++11 -fPIC -Wall -I. -c
 LDFLAGS=-std=c++11 -shared 
 LDFLAGSEXTRA=-install_name @rpath/UtilityToolsInterfaces/lib/
@@ -14,7 +14,7 @@ $(LIBDIR):
 	mkdir $(LIBDIR) 
 
 python/_ObjectHolder.so: lib/libObjectHolder.so python/ObjectHolder_wrap.o
-	$(CC) $(LDFLAGS) python/ObjectHolder_wrap.o -L/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/config -ldl -lpython2.7 -Llib/ -lObjectHolder -Xlinker -rpath -Xlinker `dirname \`pwd\`` -o python/_ObjectHolder.so
+	$(CC) $(LDFLAGS) python/ObjectHolder_wrap.o `python2.7-config --ldflags` -o python/_ObjectHolder.so  -Wl,-rpath,'$$ORIGIN/../lib' -Llib/ -lObjectHolder
 
 python/ObjectHolder_wrap.o: python/ObjectHolder_wrap.cxx
 	$(CC) $(CFLAGS) python/ObjectHolder_wrap.cxx `python2.7-config --cflags` -o python/ObjectHolder_wrap.o
@@ -23,7 +23,7 @@ python/ObjectHolder_wrap.cxx: python/ObjectHolder.i
 	swig -Wall -c++ -python python/ObjectHolder.i
 
 lib/libObjectHolder.so: build/SingleObjectHolder.o build/VectorObjectHolder.o
-	$(CC) $(LDFLAGS) $(LDFLAGSEXTRA)libObjectHolder.so build/SingleObjectHolder.o build/VectorObjectHolder.o -o lib/libObjectHolder.so
+	$(CC) $(LDFLAGS) build/SingleObjectHolder.o build/VectorObjectHolder.o -o lib/libObjectHolder.so
 
 build/SingleObjectHolder.o: src/SingleObjectHolder.cxx
 	$(CC) $(CFLAGS) src/SingleObjectHolder.cxx -o build/SingleObjectHolder.o
