@@ -1,6 +1,7 @@
 #include "UtilityToolsInterfaces/SingleObjectHolder.h"
 #include <utility>
 #include <typeinfo>
+#include <type_traits>
 
 
 template <class T>
@@ -11,13 +12,17 @@ SingleObjectHolder<T>::~SingleObjectHolder()
 
 template <class T>
 SingleObjectHolder<T>::SingleObjectHolder(T init_) : 
-    m_ptr(init_), m_classname(""), m_initValue(init_) 
-{ }
+    m_ptr(init_), m_classname(""), m_initValue(init_), m_ptr_addr(0) 
+{ 
+   if ( std::is_class<T>::value ) m_ptr_addr = &m_ptr;
+}
 
 template <class T>
 SingleObjectHolder<T>::SingleObjectHolder(T ptr, T init_) : 
-    m_ptr(ptr), m_classname(""),m_initValue(init_)
-{ }
+    m_ptr(ptr), m_classname(""),m_initValue(init_), m_ptr_addr(0)
+{ 
+   if ( std::is_class<T>::value ) m_ptr_addr = &m_ptr;
+}
  
 template <class T>
 int SingleObjectHolder<T>::clear() {
@@ -35,9 +40,10 @@ bool SingleObjectHolder<T>::isempty() {
 template <class T>
 void SingleObjectHolder<T>::getRawPointers(std::vector<std::pair<void*, std::string> > & ptrs) {
         //we return the address directly, and not the address of the pointer.
-        ptrs.push_back(std::make_pair(static_cast<void*>(&m_ptr), std::string("")));
-    
-        
+        if ( !(std::is_class<T>::value) )
+           ptrs.push_back(std::make_pair(static_cast<void*>(&m_ptr), std::string("")));
+        else 
+           ptrs.push_back(std::make_pair(static_cast<void*>(&m_ptr_addr), std::string("")));
 }
 
 template <class T>
@@ -67,6 +73,9 @@ void SingleObjectHolder<T>::setClassName(const std::string& cn) { m_classname = 
 //template class definition
 template class SingleObjectHolder<int>;
 template class SingleObjectHolder<unsigned int>;
+template class SingleObjectHolder<unsigned long long int>;
 template class SingleObjectHolder<float>;
+template class SingleObjectHolder<std::string>;
+
 
 

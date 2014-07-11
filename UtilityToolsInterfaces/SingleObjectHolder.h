@@ -34,6 +34,8 @@ protected:
        std::string m_classname;
        T m_initValue;
 
+       T * m_ptr_addr; 
+
 };
 
 #endif

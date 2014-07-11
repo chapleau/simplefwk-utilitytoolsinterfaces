@@ -76,9 +76,12 @@ void VectorObjectHolder<T>::setClassName(const std::string& cn) { m_classname = 
 
 //template class definition
 template class VectorObjectHolder<int>;
+template class VectorObjectHolder<unsigned int>;
+template class VectorObjectHolder<unsigned long long int>;
 template class VectorObjectHolder<float>;
 template class VectorObjectHolder<double>;
 template class VectorObjectHolder<std::string>;
+
 //template class VectorObjectHolder<std::vector<int> >;
 //template class VectorObjectHolder<std::vector<float> >;
 

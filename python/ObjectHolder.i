@@ -14,6 +14,8 @@ namespace std {
        %template(FloatVector) vector<float>;
        %template(DoubleVector) vector<double>;
        %template(StringVector) vector<string>;
+       %template(IntVector) vector<int>;
+       %template(ULongIntVector) vector<unsigned long int>;
 }
 
 
@@ -47,11 +49,15 @@ public:
 };
 
 %template(VectorObjectHolder_Int) VectorObjectHolder<int>;
+%template(VectorObjectHolder_ULongInt) VectorObjectHolder<unsigned long long int>;
+%template(VectorObjectHolder_UInt) VectorObjectHolder<unsigned int>;
 %template(VectorObjectHolder_Float) VectorObjectHolder<float>;
 %template(VectorObjectHolder_Double) VectorObjectHolder<double>;
 %template(VectorObjectHolder_String) VectorObjectHolder<std::string>;
 
 %template(SingleObjectHolder_Int) SingleObjectHolder<int>;
+%template(SingleObjectHolder_ULongInt) SingleObjectHolder<unsigned long long int>;
 %template(SingleObjectHolder_UInt) SingleObjectHolder<unsigned int>;
 %template(SingleObjectHolder_Float) SingleObjectHolder<float>;
+%template(SingleObjectHolder_String) SingleObjectHolder<std::string>;
 
